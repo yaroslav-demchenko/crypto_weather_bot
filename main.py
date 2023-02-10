@@ -27,8 +27,11 @@ def telegram_bot(token: str):
     def process_callback_button(callback_query: types.CallbackQuery):
 
         def send_weather(message):
+            city = message.text
+            if city.lower() == "kyiv":
+                city = "kiev"
             try:
-                weather_data = get_weather(message.text)
+                weather_data = get_weather(city)
                 bot.send_message(
                     message.chat.id,
                     f"Today is {weather_data[0]}\n"
@@ -68,7 +71,7 @@ def telegram_bot(token: str):
         msg = bot.send_message(
             callback_query.from_user.id,
             "Write a couple of currencies you are interested"
-            " in in format 'btc_usdt'",
+            " in in format btc_usdt",
         )
         bot.register_next_step_handler(msg, send_crypto)
 
